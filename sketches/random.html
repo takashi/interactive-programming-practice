@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>random</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+  <script src="bower_components/paper/dist/paper-full.js"></script>
+  <script type="text/paperscript" canvas="canvas">
+    // boxクラス
+    var Box = function() {
+      // 座標
+      this.x = 0;
+      this.y = 0;
+      // width, height
+      this.w = 100;
+      this.h = 100;
+    }
+
+    /**
+     * boxを描画する
+     */
+    Box.prototype.draw = function() {
+      this.rect = new Path.Rectangle({
+          point: new Point(this.x, this.y),
+          size: new Size(this.w, this.h),
+          strokeColor: 'black'
+      });
+    };
+
+
+    function Node() {
+      this.x = 0;
+      this.y = 0;
+      this.vx = 0;
+      this.vy = 0;
+      this.point;
+      this.path;
+      this.box;
+
+      this.path = new Path({
+        strokeColor: 'black'
+      });
+    }
+
+    Node.prototype.draw = function() {
+      this.x += getRandom(-10, 10);
+      this.y += getRandom(-10, 10);
+
+      if(this.x <= this.box.x) {
+        this.x = this.box.x;
+      }else if((this.box.x + this.box.w) <= this.x) {
+        this.x = this.box.x + this.box.w
+      }
+
+      if(this.y <= this.box.y) {
+        this.y = this.box.y;
+      }else if((this.box.y + this.box.h) <= this.y) {
+        this.y = this.box.y + this.box.h
+      }
+
+      this.path.add(new Point(this.x, this.y));
+    };
+
+
+    // pathをつくる
+    var path = new Path({
+      strokeColor: 'black'
+    });
+
+    // min から max までの乱数を返す関数
+    // jsのMath.randomは0~1までしか返さないから実装しておく
+    function getRandom(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    var boxW = 0;
+    var boxH = 0;
+    var nodes = []
+    for(var i = 0; i < 12; i++) {
+      var box = new Box();
+      box.x = boxW + (i % 3) * 110;
+      box.y = boxH + (Math.floor(i/3)) * 110;
+      box.draw();
+      var node = new Node();
+      node.box = box;
+      node.x = box.x;
+      node.y = box.y;
+      nodes.push(node);
+    }
+
+    // 各フレームごとに描画
+    function onFrame(event) {
+      for(var i = 0, node; node = nodes[i]; i++){
+        node.draw();
+      }
+    }
+  </script>
+</head>
+<body>
+  <canvas id="canvas" resize></canvas>
+</body>
+</html>
