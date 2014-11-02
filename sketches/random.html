@@ -7,6 +7,7 @@
     body {
       margin: 0;
       overflow: hidden;
+      background-color: #252525;
     }
   </style>
   <script src="bower_components/paper/dist/paper-full.js"></script>
@@ -33,6 +34,9 @@
     };
 
 
+    /**
+     * moving point
+     */
     function Node() {
       this.x = 0;
       this.y = 0;
@@ -43,14 +47,29 @@
       this.box;
 
       this.path = new Path({
-        strokeColor: 'black'
+        strokeColor: '#f8f8f8'
       });
     }
 
+    /**
+     * draw lines
+     */
     Node.prototype.draw = function() {
+      this.update();
+      this.constraints();
+      this.box.fillColor = new Color(0,0,0,0.5);
+      this.path.add(new Point(this.x, this.y));
+    };
+
+    /**
+     * update directions
+     */
+    Node.prototype.update = function() {
       this.x += getRandom(-10, 10);
       this.y += getRandom(-10, 10);
+    };
 
+    Node.prototype.constraints = function() {
       if(this.x <= this.box.x) {
         this.x = this.box.x;
       }else if((this.box.x + this.box.w) <= this.x) {
@@ -62,10 +81,7 @@
       }else if((this.box.y + this.box.h) <= this.y) {
         this.y = this.box.y + this.box.h
       }
-
-      this.path.add(new Point(this.x, this.y));
-    };
-
+    }
 
     // pathをつくる
     var path = new Path({
@@ -81,15 +97,20 @@
     var boxW = 0;
     var boxH = 0;
     var nodes = []
-    for(var i = 0; i < 12; i++) {
-      var box = new Box();
-      box.x = boxW + (i % 3) * 110;
-      box.y = boxH + (Math.floor(i/3)) * 110;
+    for(var i = 0; i < 9; i++) {
+      var box = new Box()
+      var winW = window.innerWidth - 40;
+      var winH = window.innerHeight - 40;
+      box.w = Math.round(winW / 3);
+      box.h = Math.round(winH / 3);
+      box.x = ((i % 3) * (box.w+10)) + 10;
+      box.y = ((Math.floor(i/3)) * (box.h+10)) + 10;
       box.draw();
       var node = new Node();
       node.box = box;
       node.x = box.x;
       node.y = box.y;
+      node.path.add(new Point(box.x, box.y));
       nodes.push(node);
     }
 
