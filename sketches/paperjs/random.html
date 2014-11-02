@@ -10,7 +10,7 @@
       background-color: #252525;
     }
   </style>
-  <script src="bower_components/paper/dist/paper-full.js"></script>
+  <script src="../bower_components/paper/dist/paper-full.js"></script>
   <script type="text/paperscript" canvas="canvas">
     // boxクラス
     var Box = function() {
@@ -57,7 +57,6 @@
     Node.prototype.draw = function() {
       this.update();
       this.constraints();
-      this.box.fillColor = new Color(0,0,0,0.5);
       this.path.add(new Point(this.x, this.y));
     };
 
