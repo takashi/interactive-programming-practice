@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf8">
+    <title>Processing.js</title>
+    <style>
+    canvas:focus {
+      outline: none;
+    }
+    </style>
+    <script src="../bower_components/Processing.js/processing.min.js"></script>
+  </head>
+  <body>
+    <script type="text/processing">
+      void setup() {
+        size(250, 250);
+        frameRate(20);
+      }
+      void draw() {
+        //background(255);
+        fadeToWhite();
+        stroke(mouseX, 0, mouseY);
+        ellipse(width/2, height/2, mouseX, mouseY);
+      }
+      void fadeToWhite() {
+        noStroke();
+        fill(255, 30);
+        rectMode(CORNER);
+        rect(0, 0, width, height);
+      }
+    </script>
+    <canvas></canvas>
+  </body>
+</html>
