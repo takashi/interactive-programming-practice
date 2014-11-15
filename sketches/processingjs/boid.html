@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Void</title>
+  <style>
+    canvas:focus {
+      outline: none;
+    }
+  </style>
+  <script src="../bower_components/Processing.js/processing.min.js"></script>
+</head>
+<body>
+  <script type="text/processing">
+  void setup(){
+    size(250, 250);
+    frameRate(20);
+    noFill();
+    stroke(255, 255, 255);
+  }
+
+  /**
+   * Bird Constructor
+   * @param {int} x      current position
+   * @param {int} y      current position
+   * @param {int} vx     移動量
+   * @param {int} vy     移動量
+   * @param {int} id     id
+   */
+  var Bird = function(x, y, vx, vy, id, others){
+    this.x = x;
+    this.y = y; // x,y: Birdインスタンスの現在の位置
+    this.vx = vx;
+    this.vy = vy; // vx, vy: 移動量
+    this.id = id; // 個体を識別するid
+    this.v1 = this.v2 = this.v3 = new PVector(); // 移動量を決定する要素
+  }
+
+  Bird.prototype.move = function() {
+
+  }
+
+  /**
+   * Birds Manager
+   * @param {[Bird]} birds
+   */
+  var BirdsManager = function(birds) {
+    this.birds = birds
+  }
+
+  BirdsManager.prototype.check = function() {
+    this.center();
+    this.avoid();
+    this.avarage();
+  }
+
+  BirdsManager.prototype.drawAll = function() {
+
+  }
+  </script>
+  <canvas></canvas>
+</body>
+</html>
