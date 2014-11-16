@@ -101,14 +101,14 @@
       Ball.prototype.collide = function() {
         var dx, dy, distance, angle, pushDistance, pushX, pushY;
         for(var i = 0, other; other = this.others[i]; i++) {
-          if(other.id == this.id) return;
+          if(other.id == this.id) continue;
           dx = other.x - this.x;
           dy = other.y - this.y;
-          distance = Math.sqrt(dy*dy, dy*dy);
+          distance = sqrt(dy*dy + dy*dy);
 
           // 衝突判定
           if(distance <= R*2) {
-            angle = Math.atan2(dy, dx);
+            angle = atan2(dy, dx);
             pushDistance = R*2-distance;
             pushX = pushDistance*cos(angle);
             pushY = pushDistance*sin(angle);
