@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>divide</title>
+  <script src="../bower_components/Processing.js/processing.min.js"></script>
+</head>
+<body>
+  <script type="text/processing" data-processing-target="main">
+    var nodes = [];
+    var R = 10;
+    var SPEED = 5;
+    var X = 0;
+    var Y = 1;
+
+    void setup() {
+      window.onresize = function() {
+        size(window.innerWidth, window.innerHeight);
+        reset();
+      }
+
+      size(window.innerWidth, window.innerHeight);
+      frameRate(60);
+      noFill();
+      stroke(0, 0, 0);
+      reset();
+    }
+
+    void reset() {
+      background(255);
+      nodes = [];
+      nodes.push(new Node(width / 2, height / 2, SPEED, SPEED * 2, 255,255,255));
+    }
+
+    void draw() {
+      background(255);
+      for(var i = 0, node; node = nodes[i]; i++){
+        node.draw();
+      }
+    }
+
+    var Node = function(x,y,vx,vy,r,g,b) {
+      this.x = x;
+      this.y = y;
+      this.vx = vx;
+      this.vy = vy;
+      this.r = r;
+      this.g = g;
+      this.b = b;
+      this.flag = false;
+    }
+
+    Node.prototype.draw = function() {
+      this.update();
+      this.constraint();
+      fill(this.r, this.g, this.b);
+      if(this.r == 255 && this.g == 255 && this.b == 255){
+        stroke(0);
+      }else{
+        noStroke();
+      }
+      ellipse(this.x, this.y, R * 2, R * 2);
+    };
+
+    Node.prototype.update = function() {
+      this.x += this.vx;
+      this.y += this.vy;
+    };
+
+    Node.prototype.constraint = function() {
+      if(this.x - R <= 0) {
+        this.x = R;
+        this.vx *= -1; // 移動の向きを逆に
+        this.flag = X;
+      }else if(width <= this.x + R){
+        this.x = width - R;
+        this.vx *= -1;
+        this.flag = X;
+      }
+      console.log(this.vx);
+
+      if(this.y - R <= 0) {
+        this.y = R;
+        this.vy *= -1; // 移動の向きを逆に
+        this.flag = Y;
+      }else if(height <= this.y + R){
+        this.y = height - R;
+        this.vy *= -1;
+        this.flag = Y;
+      }
+      switch(this.flag) {
+        case X:
+          if(nodes.length > 20) break;
+          nodes.push(new Node(
+            this.x, this.y, this.vx, -this.vy, 255,255,255
+          ));
+          break;
+        case Y:
+          if(nodes.length > 20) break;
+          nodes.push(new Node(
+            this.x, this.y, -this.vx, this.vy, 255,255,255
+          ));
+          break;
+      }
+      this.flag = false;
+    };
+  </script>
+  <div class="main">
+    <canvas id="main"></canvas>
+  </div>
+</body>
+</html>
